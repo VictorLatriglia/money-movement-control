@@ -14,6 +14,9 @@ import { AppRoutes } from './app.routing';
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 
 
+import { AuthorizationService } from '../api/authorization.service';
+import { MoneyMovementService } from '../api/moneyMovement.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,7 +33,9 @@ import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.compon
     FooterModule,
     FixedPluginModule
   ],
-  providers: [],
+  providers: [
+    AuthorizationService,
+    MoneyMovementService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
