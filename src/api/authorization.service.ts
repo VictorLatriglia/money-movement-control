@@ -22,20 +22,20 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class AuthorizationService {
 
     protected basePath = '/';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
-
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
-        if (basePath) {
-            this.basePath = basePath;
+    
+    constructor(protected httpClient: HttpClient, @Optional() configuration: Configuration) {
+        if (BASE_PATH) {
+            this.basePath = BASE_PATH;
         }
         if (configuration) {
             this.configuration = configuration;
-            this.basePath = basePath || configuration.basePath || this.basePath;
+            this.basePath = BASE_PATH || configuration.basePath || this.basePath;
         }
     }
 
@@ -61,10 +61,10 @@ export class AuthorizationService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public authorizationGet(phoneNumber?: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public authorizationGet(phoneNumber?: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public authorizationGet(phoneNumber?: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public authorizationGet(phoneNumber?: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public authorizationGet(phoneNumber?: string, reportProgress?: boolean): Observable<any>;
+    public authorizationGet(phoneNumber?: string, reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public authorizationGet(phoneNumber?: string, reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public authorizationGet(phoneNumber?: string, reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -91,7 +91,6 @@ export class AuthorizationService {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
-                observe: observe,
                 reportProgress: reportProgress
             }
         );
@@ -105,10 +104,10 @@ export class AuthorizationService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public authorizationPost(xUserPhone: string, otp: number, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public authorizationPost(xUserPhone: string, otp: number, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public authorizationPost(xUserPhone: string, otp: number, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public authorizationPost(xUserPhone: string, otp: number, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public authorizationPost(xUserPhone: string, otp: number, reportProgress?: boolean): Observable<any>;
+    public authorizationPost(xUserPhone: string, otp: number, reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public authorizationPost(xUserPhone: string, otp: number, reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public authorizationPost(xUserPhone: string, otp: number, reportProgress: boolean = false ): Observable<any> {
 
 
 
@@ -139,7 +138,6 @@ export class AuthorizationService {
                 params: queryParameters,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,
-                observe: observe,
                 reportProgress: reportProgress
             }
         );

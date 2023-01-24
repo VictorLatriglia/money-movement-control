@@ -24,20 +24,21 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
-@Injectable()
+
+@Injectable({providedIn: 'root'})
 export class MoneyMovementService {
 
     protected basePath = '/';
     public defaultHeaders = new HttpHeaders();
     public configuration = new Configuration();
 
-    constructor(protected httpClient: HttpClient, @Optional()@Inject(BASE_PATH) basePath: string, @Optional() configuration: Configuration) {
-        if (basePath) {
-            this.basePath = basePath;
+    constructor(protected httpClient: HttpClient, @Optional() configuration: Configuration) {
+        if (BASE_PATH) {
+            this.basePath = BASE_PATH;
         }
         if (configuration) {
             this.configuration = configuration;
-            this.basePath = basePath || configuration.basePath || this.basePath;
+            this.basePath = BASE_PATH || configuration.basePath || this.basePath;
         }
     }
 

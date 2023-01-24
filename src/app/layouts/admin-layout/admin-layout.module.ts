@@ -24,7 +24,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     NgbModule
   ],
   declarations: [
-    DashboardComponent,
+    //DashboardComponent,
     UserComponent,
     TableComponent,
     UpgradeComponent,

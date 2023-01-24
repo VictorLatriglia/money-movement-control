@@ -1,0 +1,10 @@
+<div class="login-page">
+    <div class="form">
+      <form class="login-form">
+        <ngx-loading [show]="loading"></ngx-loading>
+        <input type="number" *ngIf="!showOtpField" [(ngModel)]="phoneNumber" placeholder="Teléfono"/>
+        <input type="number" *ngIf="showOtpField" [(ngModel)]="otp" placeholder="Clave"/>
+        <button (click)="LogIn()">login</button>
+      </form>
+    </div>
+  </div>

@@ -13,6 +13,7 @@
   },
   "private": true,
   "dependencies": {
+    "@angular-material-components/datetime-picker": "^8.0.0",
     "@angular/animations": "^14.2.0",
     "@angular/cdk": "^14.2.0",
     "@angular/common": "^14.2.0",
@@ -27,8 +28,8 @@
     "@angular/platform-browser-dynamic": "^14.2.0",
     "@angular/router": "^14.2.0",
     "@ng-bootstrap/ng-bootstrap": "13.0.0",
-    "@popperjs/core": "^2.11.4",
     "@ngui/map": "0.30.3",
+    "@popperjs/core": "^2.11.4",
     "@types/googlemaps": "3.39.14",
     "arrive": "2.4.1",
     "bootstrap": "4.5.2",
@@ -38,10 +39,11 @@
     "express": "4.18.0",
     "jquery": "3.5.1",
     "moment": "2.29.1",
+    "ngx-loading": "^14.0.0",
     "ngx-toastr": "14.3.0",
     "rxjs": "~7.5.0",
-    "zone.js": "~0.11.4",
-    "web-animations-js": "2.3.2"
+    "web-animations-js": "2.3.2",
+    "zone.js": "~0.11.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^14.2.7",
