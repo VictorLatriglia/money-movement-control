@@ -21,29 +21,45 @@ export class DashboardComponent implements OnInit {
   public chartEmail;
   public chartHours;
 
-  public showSpinners:boolean = true;
-  public showSeconds:boolean = true;
+  public showSpinners: boolean = true;
+  public showSeconds: boolean = true;
 
   range = new FormGroup({
     start: new FormControl<Date | null>(null),
     end: new FormControl<Date | null>(null),
   });
-  
+
+  private userId: string;
+
   constructor(private navigationService: Router, private MoneyMovementService: MoneyMovementService) {
-
   }
-  ngOnInit() {
-    var userId = sessionStorage.getItem("userId");
-    if(!userId){
-      this.navigationService.navigate(["/","login"]);
-    }
 
-    let today = new Date();
-    let monthStart = new Date(today.getFullYear(),today.getMonth())
-    this.MoneyMovementService.moneyMovementGetGet(userId,monthStart,today).subscribe(res=>{
+  buscar() {
+    var start:Date = this.range.controls['start'].value;
+    var end:Date = this.range.controls['end'].value;
+    this.MoneyMovementService.moneyMovementGetGet(this.userId, start, end).subscribe(res => {
       console.log(res.data);
       console.log(res);
     })
+  }
+
+  ngOnInit() {
+    this.userId = sessionStorage.getItem("userId");
+    if (!this.userId) {
+      this.navigationService.navigate(["/", "login"]);
+    }
+
+    let today = new Date();
+    let monthStart = new Date(today.getFullYear(), today.getMonth())
+    console.log("Today", today);
+    console.log("monthStart", monthStart);
+    this.range.controls['start'].setValue(today);
+    this.range.controls['end'].setValue(monthStart);
+    console.log("finished setting up");
+    // this.MoneyMovementService.moneyMovementGetGet(userId,monthStart,today).subscribe(res=>{
+    //   console.log(res.data);
+    //   console.log(res);
+    // })
 
     this.chartColor = "#FFFFFF";
 
