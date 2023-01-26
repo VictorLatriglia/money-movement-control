@@ -1,5 +1,5 @@
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ToastrModule } from "ngx-toastr";
 
@@ -26,6 +26,10 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { DashboardComponent } from "./pages/dashboard/dashboard.component";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatButtonModule } from "@angular/material/button";
+
+import localeEs from "@angular/common/locales/es";
+import { registerLocaleData } from "@angular/common";
+registerLocaleData(localeEs, "es");
 
 @NgModule({
   declarations: [
@@ -63,7 +67,8 @@ import { MatButtonModule } from "@angular/material/button";
   ],
   providers: [
     AuthorizationService,
-    MoneyMovementService],
+    MoneyMovementService,
+    {provide: LOCALE_ID, useValue: 'es'}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
