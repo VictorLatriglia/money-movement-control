@@ -29,6 +29,7 @@ import { MatButtonModule } from "@angular/material/button";
 
 import localeEs from "@angular/common/locales/es";
 import { registerLocaleData } from "@angular/common";
+import { MatInputModule } from "@angular/material/input";
 registerLocaleData(localeEs, "es");
 
 @NgModule({
@@ -46,6 +47,7 @@ registerLocaleData(localeEs, "es");
     MatNativeDateModule,
     MatDatepickerModule,
     MatFormFieldModule,
+    MatInputModule,
     MatButtonModule,
     SidebarModule,
     NavbarModule,
@@ -58,10 +60,10 @@ registerLocaleData(localeEs, "es");
     NgxMatDatetimePickerModule,
     NgxLoadingModule.forRoot({
       animationType: ngxLoadingAnimationTypes.wanderingCubes,
-      backdropBackgroundColour: "rgba(0,0,0,0.1)",
+      backdropBackgroundColour: "rgba(0,0,0,0.7)",
       backdropBorderRadius: "4px",
-      primaryColour: "#ffffff",
-      secondaryColour: "#ffffff",
+      primaryColour: "#31C942",
+      secondaryColour: "#31C942",
       tertiaryColour: "#ffffff",
     })
   ],

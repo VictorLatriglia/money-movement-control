@@ -28,6 +28,8 @@ export class DashboardComponent implements OnInit {
   public chartEmail;
   public chartHours;
 
+  public loading: boolean;
+
   public showSpinners: boolean = true;
   public showSeconds: boolean = true;
 
@@ -36,6 +38,8 @@ export class DashboardComponent implements OnInit {
     end: new FormControl<Date | null>(null),
   });
 
+  public dataRetrieved: ResultCategoryInformation[];
+  public tableData: TableInformation[];
   private userId: string;
 
   constructor(private navigationService: Router, private MoneyMovementService: MoneyMovementService) {
@@ -44,10 +48,18 @@ export class DashboardComponent implements OnInit {
   buscar() {
     var start: Date = this.range.controls['start'].value;
     var end: Date = this.range.controls['end'].value;
+    this.loading = true;
     this.MoneyMovementService.moneyMovementGetGet(this.userId, start, end).subscribe(res => {
-      console.log(res.data);
-      console.log(res);
+      this.dataRetrieved = res.data;
+      console.log(this.dataRetrieved);
+      this.tableData = [];
+      res.data.forEach(category => {
+        category.movements.forEach(outgoing => {
+          this.tableData.push(new TableInformation(category.category, outgoing.ammount, outgoing.tag, outgoing.createdOn, outgoing.id, category.categoryId));
+        });
+      });
       this.calculateChart(res.data);
+      this.loading = false;
     })
   }
 
@@ -59,20 +71,37 @@ export class DashboardComponent implements OnInit {
 
     let today = new Date();
     let monthStart = new Date(today.getFullYear(), today.getMonth())
-    console.log("Today", today);
-    console.log("monthStart", monthStart);
     this.range.controls['start'].setValue(monthStart);
     this.range.controls['end'].setValue(today);
-    console.log("finished setting up");
     this.buscar();
 
     this.chartColor = "#FFFFFF";
-
-
-
   }
 
-  
+  updateRecord(element: TableInformation) {
+    element.isUpdating = true;
+  }
+
+  saveUpdate(element: TableInformation) {
+    this.loading = true;
+    this.MoneyMovementService.moneyMovementUpdatePut(
+      {
+        id: element.id,
+        ammount: element.ammount,
+        categoryId: element.categoryId,
+        userId: this.userId,
+        tag: element.tag,
+        createdOn: element.createdOn
+      }, this.userId).subscribe(res => {
+        this.loading = false;
+        element.rebuildAmmount();
+        element.isUpdating = false;
+      })
+  }
+
+  cancelUpdate(element: TableInformation) {
+    element.isUpdating = false;
+  }
 
   calculateChart(data: ResultCategoryInformation[]) {
     this.canvas = document.getElementById("chartEmail");
@@ -80,7 +109,7 @@ export class DashboardComponent implements OnInit {
     this.chartEmail = new Chart(this.ctx, {
       type: 'pie',
       data: {
-        labels: data.map(e => e.category +" "+ formatter.format(e.movements.map(x => x.ammount).reduce((prev, next) => prev + next))),
+        labels: data.map(e => e.category + " " + formatter.format(e.movements.map(x => x.ammount).reduce((prev, next) => prev + next))),
         datasets: [{
           label: "Emails",
           pointRadius: 0,
@@ -130,5 +159,30 @@ export class DashboardComponent implements OnInit {
         },
       }
     });
+  }
+}
+
+class TableInformation {
+  category: string;
+  categoryId: string;
+  ammountStr: string;
+  ammount: number;
+  tag: string;
+  createdOn: Date;
+  id: string;
+  isUpdating: boolean;
+
+  constructor(category: string, ammount: number, tag: string, createdOn: Date, id: string, categoryId: string) {
+    this.category = category;
+    this.ammount = ammount;
+    this.ammountStr = formatter.format(ammount);
+    this.tag = tag;
+    this.createdOn = createdOn;
+    this.id = id;
+    this.categoryId = categoryId;
+  }
+
+  rebuildAmmount() {
+    this.ammountStr = formatter.format(this.ammount);
   }
 }
