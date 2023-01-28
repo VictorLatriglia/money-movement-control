@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MoneyMovementService } from 'api/moneyMovement.service';
 import Chart from 'chart.js';
+import { OutgoingsCategory } from 'model/outgoingsCategory';
 import { ResultCategoryInformation } from 'model/resultCategoryInformation';
 
 const formatter = new Intl.NumberFormat('es-CO', {
@@ -39,19 +40,23 @@ export class DashboardComponent implements OnInit {
   });
 
   public dataRetrieved: ResultCategoryInformation[];
+  public categoriesInformation: OutgoingsCategory[];
   public tableData: TableInformation[];
   private userId: string;
 
   constructor(private navigationService: Router, private MoneyMovementService: MoneyMovementService) {
+    this.dataRetrieved = [];
+    this.categoriesInformation = [];
+    this.tableData = [];
   }
 
-  buscar() {
+  search() {
     var start: Date = this.range.controls['start'].value;
     var end: Date = this.range.controls['end'].value;
     this.loading = true;
     this.MoneyMovementService.moneyMovementGetGet(this.userId, start, end).subscribe(res => {
       this.dataRetrieved = res.data;
-      console.log(this.dataRetrieved);
+      this.categoriesInformation = res.categories;
       this.tableData = [];
       res.data.forEach(category => {
         category.movements.forEach(outgoing => {
@@ -63,19 +68,17 @@ export class DashboardComponent implements OnInit {
     })
   }
 
-  ngOnInit() {
-    this.userId = sessionStorage.getItem("userId");
-    if (!this.userId) {
-      this.navigationService.navigate(["/", "login"]);
-    }
-
-    let today = new Date();
-    let monthStart = new Date(today.getFullYear(), today.getMonth())
-    this.range.controls['start'].setValue(monthStart);
-    this.range.controls['end'].setValue(today);
-    this.buscar();
-
-    this.chartColor = "#FFFFFF";
+  deleteRecord(element: TableInformation) {
+    element.isDeleting = true;
+  }
+  cancelDeletion(element: TableInformation) {
+    element.isDeleting = false;
+  }
+  confirmDeletion(element: TableInformation) {
+    this.loading = true;
+    this.MoneyMovementService.moneyMovementDeleteDelete(this.userId, element.id).subscribe(res => {
+      this.search();
+    })
   }
 
   updateRecord(element: TableInformation) {
@@ -160,6 +163,21 @@ export class DashboardComponent implements OnInit {
       }
     });
   }
+
+  ngOnInit() {
+    this.userId = sessionStorage.getItem("userId");
+    if (!this.userId) {
+      this.navigationService.navigate(["/", "login"]);
+    }
+
+    let today = new Date();
+    let monthStart = new Date(today.getFullYear(), today.getMonth())
+    this.range.controls['start'].setValue(monthStart);
+    this.range.controls['end'].setValue(today);
+    this.search();
+
+    this.chartColor = "#FFFFFF";
+  }
 }
 
 class TableInformation {
@@ -171,6 +189,7 @@ class TableInformation {
   createdOn: Date;
   id: string;
   isUpdating: boolean;
+  isDeleting: boolean;
 
   constructor(category: string, ammount: number, tag: string, createdOn: Date, id: string, categoryId: string) {
     this.category = category;

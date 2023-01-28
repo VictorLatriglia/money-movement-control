@@ -9,8 +9,10 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { OutgoingsCategory } from './outgoingsCategory';
 import { ResultCategoryInformation } from './resultCategoryInformation';
 
 export interface MoneyMovementResult { 
     data?: Array<ResultCategoryInformation>;
+    categories?: Array<OutgoingsCategory>;
 }

@@ -30,6 +30,7 @@ import { MatButtonModule } from "@angular/material/button";
 import localeEs from "@angular/common/locales/es";
 import { registerLocaleData } from "@angular/common";
 import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
 registerLocaleData(localeEs, "es");
 
 @NgModule({
@@ -48,6 +49,7 @@ registerLocaleData(localeEs, "es");
     MatDatepickerModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatButtonModule,
     SidebarModule,
     NavbarModule,

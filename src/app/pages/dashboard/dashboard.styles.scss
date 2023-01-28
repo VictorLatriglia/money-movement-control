@@ -27,10 +27,42 @@ $theme: mat.define-light-theme((
   )
 ));
 
+.demo-inline-calendar-card {
+  width: 300px;
+}
 .example-full-width {
   width: 100%;
 }
+
+.deletion{
+  text-align: center
+}
+
+.margin-btn{
+  margin: 5px;
+}
+
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
 @include mat.all-component-themes($theme);
+
+
+::ng-deep .mat-form-field-flex{
+  border-style: groove !important;
+} 
+
+
+::ng-deep .mat-select-panel{
+  background: white !important;
+} 
+
+::ng-deep .mat-select-value-text{
+  color: black !important;
+  font-weight: bold;
+} 
+
+::ng-deep .mat-select-arrow-wrapper{
+  background-color: rebeccapurple !important;
+  font-weight: bold;
+} 

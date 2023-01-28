@@ -16,7 +16,7 @@
       <mat-date-range-picker #picker>
         <mat-date-range-picker-actions>
           <button mat-button matDateRangePickerCancel>Cancelar</button>
-          <button mat-raised-button color="primary" matDateRangePickerApply (click)="buscar()">Buscar</button>
+          <button mat-raised-button color="primary" matDateRangePickerApply (click)="search()">Buscar</button>
         </mat-date-range-picker-actions>
       </mat-date-range-picker>
       <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Fecha de inicio
@@ -65,32 +65,50 @@
               </th>
             </thead>
             <tbody>
-              <tr *ngFor="let element of tableData; index as i; first as isFirst">
-                <th>{{i + 1}}</th>
-                <th>
+              <tr *ngFor="let element of tableData; index as i; first as isFirst" [ngStyle]="{'background-color': (element.isUpdating) ? '#fafafa' : '#ffffff'}">
+                <td *ngIf="element.isDeleting" colspan="6" class="deletion">
+                  <button mat-raised-button color="primary" class="margin-btn"
+                    (click)="cancelDeletion(element)">Cancelar</button>
+                  <button mat-raised-button color="warn" class="margin-btn"
+                    (click)="confirmDeletion(element)">Eliminar</button>
+                </td>
+                <td *ngIf="!element.isDeleting">{{i + 1}}</td>
+                <td *ngIf="!element.isDeleting">
                   <p *ngIf="!element.isUpdating">{{element.tag | titlecase}}</p>
-                  <mat-form-field *ngIf="element.isUpdating" class="example-full-width">
+                  <mat-form-field *ngIf="element.isUpdating" class="example-full-width ">
                     <input matInput placeholder="Ej. Pizza" [(ngModel)]="element.tag">
                   </mat-form-field>
-                </th>
-                <th>
-                  {{element.category | titlecase}}
-                </th>
-                <th>
+                </td>
+                <td *ngIf="!element.isDeleting">
+                  <p *ngIf="!element.isUpdating">{{element.category | titlecase}}</p>
+                  <mat-form-field *ngIf="element.isUpdating" appearance="fill" class="updatingElement">
+                    <mat-label>Seleccione la categoria</mat-label>
+                    <mat-select [(ngModel)]="element.categoryId" name="category">
+                      <mat-option *ngFor="let category of categoriesInformation" [value]="category.id">
+                        {{category.name}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                </td>
+                <td *ngIf="!element.isDeleting">
                   <p *ngIf="!element.isUpdating">{{element.ammountStr}}</p>
                   <mat-form-field *ngIf="element.isUpdating" class="example-full-width">
                     <input matInput type="number" placeholder="Ej. 20000" [(ngModel)]="element.ammount">
                   </mat-form-field>
-                </th>
-                <th>
-                  {{element.createdOn | date:"longDate"}}
-                </th>
-                <th class="text-right">
-                  <button mat-raised-button color="primary" *ngIf="!element.isUpdating" (click)="updateRecord(element)" >Actualizar</button>
-                  <button mat-raised-button color="primary" *ngIf="element.isUpdating" (click)="saveUpdate(element)" >Guardar</button>
-                  <button mat-raised-button color="warn" *ngIf="!element.isUpdating">Borrar</button>
-                  <button mat-raised-button color="warn" *ngIf="element.isUpdating" (click)="cancelUpdate(element)" >Cancelar</button>
-                </th>
+                </td>
+                <td *ngIf="!element.isDeleting">
+                  <p >{{element.createdOn | date:"longDate"}}</p>
+                </td>
+                <td *ngIf="!element.isDeleting" class="text-right">
+                  <button mat-raised-button color="primary" *ngIf="!element.isUpdating" class="margin-btn"
+                    (click)="updateRecord(element)">Actualizar</button>
+                  <button mat-raised-button color="primary" *ngIf="element.isUpdating" class="margin-btn"
+                    (click)="saveUpdate(element)">Guardar</button>
+                  <button mat-raised-button color="warn" *ngIf="!element.isUpdating" class="margin-btn"
+                    (click)="deleteRecord(element)">Borrar</button>
+                  <button mat-raised-button color="warn" *ngIf="element.isUpdating" class="margin-btn"
+                    (click)="cancelUpdate(element)">Cancelar</button>
+                </td>
               </tr>
             </tbody>
           </table>

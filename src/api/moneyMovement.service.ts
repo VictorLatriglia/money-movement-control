@@ -64,10 +64,10 @@ export class MoneyMovementService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public moneyMovementDeleteDelete(moneyMovementId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
-    public moneyMovementDeleteDelete(moneyMovementId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
-    public moneyMovementDeleteDelete(moneyMovementId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
-    public moneyMovementDeleteDelete(moneyMovementId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
+    public moneyMovementDeleteDelete(xUserKey: string, moneyMovementId: string, observe?: 'body', reportProgress?: boolean): Observable<any>;
+    public moneyMovementDeleteDelete(xUserKey: string, moneyMovementId: string, observe?: 'response', reportProgress?: boolean): Observable<HttpResponse<any>>;
+    public moneyMovementDeleteDelete(xUserKey: string, moneyMovementId: string, observe?: 'events', reportProgress?: boolean): Observable<HttpEvent<any>>;
+    public moneyMovementDeleteDelete(xUserKey: string, moneyMovementId: string, observe: any = 'body', reportProgress: boolean = false ): Observable<any> {
 
 
         let queryParameters = new HttpParams({encoder: new CustomHttpUrlEncodingCodec()});
@@ -76,7 +76,9 @@ export class MoneyMovementService {
         }
 
         let headers = this.defaultHeaders;
-
+        if (xUserKey !== undefined && xUserKey !== null) {
+            headers = headers.set('X-User-Key', String(xUserKey));
+        }
         // to determine the Accept header
         let httpHeaderAccepts: string[] = [
         ];
