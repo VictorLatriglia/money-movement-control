@@ -96,9 +96,7 @@ export class DashboardComponent implements OnInit {
         tag: element.tag,
         createdOn: element.createdOn
       }, this.userId).subscribe(res => {
-        this.loading = false;
-        element.rebuildAmmount();
-        element.isUpdating = false;
+        this.search();
       })
   }
 
